@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UserModel extends Model
+class MapelModel extends Model
 {
-    protected $table            = 'users';
+    protected $table            = 'mapel';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nama', 'email', 'password', 'role', 'kelas_id', 'created_at', 'updated_at'];
+    protected $allowedFields    = ['nama', 'kelas_id', 'guru'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,7 +21,7 @@ class UserModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -44,18 +44,12 @@ class UserModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getGuru()
+    public function getMapelPerkelas($id)
     {
-        return $this->select('users.nama,users.email,users.id,users.password, kelas.nama as kelas')
-            ->join('kelas', 'kelas.id=users.kelas_id', 'left')
-            ->where('role', 'Guru')
-            ->findAll();
-    }
-    public function getSiswaPerkelas($id)
-    {
-        return $this->select('users.nama,users.email,users.id, kelas.nama as kelas')
-            ->join('kelas', 'kelas.id=users.kelas_id', 'left')
-            ->where('kelas_id', $id)
+        return $this->select('mapel.id,mapel.nama, kelas.nama as kelas, users.nama as guru')
+            ->join('kelas', 'kelas.id=mapel.kelas_id', 'left')
+            ->join('users', 'users.id=mapel.guru', 'left')
+            ->where('mapel.kelas_id', $id)
             ->findAll();
     }
 }

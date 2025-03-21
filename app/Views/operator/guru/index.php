@@ -55,12 +55,12 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <h5>
-                            Data Siswa Kelas <?= $kelas['nama']; ?>
+                            Data Guru
                         </h5>
                         <button class="btn btn-info addBtn" data-bs-toggle="modal"
                             data-bs-target="#addModal">
                             <i class="fa fa-plus text-lg"> </i>
-                            Tambah Siswa
+                            Tambah Guru
 
                         </button>
                     </div>
@@ -71,31 +71,33 @@
                             <table id="dataTable" class="display compact striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Nama</th>
-                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
-                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Kelas</th>
+                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Guru</th>
+                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">email </th>
+                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Kelas Bimbingan </th>
                                         <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Aksi</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($siswa as $sis) : ?>
+                                    <?php foreach ($guru as $gr) : ?>
                                         <tr class="text-center">
-                                            <td><?= $sis['nama'] ?></td>
-                                            <td><?= $sis['email'] ?? 'belum ada wali kelas' ?></td>
-                                            <td><?= $sis['kelas'] ?? 'belum ada wali kelas' ?></td>
+                                            <td><?= $gr['nama'] ?></td>
+                                            <td><?= $gr['email'] ?></td>
+                                            <td><?= $gr['kelas'] ?? 'Tidak ada' ?></td>
                                             <td>
 
                                                 <button class="btn btn-sm text-white bg-warning edit-btn  mr-2"
-                                                    data-id="<?= $sis['id']; ?>"
-                                                    data-nama="<?= $sis['nama'] ?>"
-                                                    data-email="<?= $sis['email'] ?>"
+                                                    data-id="<?= $gr['id']; ?>"
+                                                    data-guru="<?= $gr['nama'] ?>"
+                                                    data-email="<?= $gr['email'] ?>"
+                                                    data-passwors="<?= $gr['password'] ?>"
+                                                    data-kelas="<?= $gr['kelas'] ?>"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#editModal">
                                                     <i class="fa fa-pen text-lg"></i>
                                                 </button>
                                                 <button class="btn btn-sm text-white bg-danger stop-btn  mr-2"
-                                                    data-id="<?= $sis['id']; ?>"
+                                                    data-id="<?= $gr['id']; ?>"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#confirmStopModal">
                                                     <i class="fa fa-trash text-lg"></i>
@@ -115,7 +117,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <p>Are you sure you want to delete?</p>
-                                            <form action="<?= base_url($role . '/deleteSiswa') ?>" method="post">
+                                            <form action="<?= base_url($role . '/deleteKelas') ?>" method="post">
                                                 <input type="hidden" id="stopPlanId" name="id">
                                         </div>
                                         <div class="modal-footer">
@@ -130,11 +132,11 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="moveJarumText">Tambah Kelas</h5>
+                                            <h5 class="modal-title" id="moveJarumText">Tambah Guru</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="<?= base_url($role . '/tambahSiswa') ?>" method="post">
+                                            <form action="<?= base_url($role . '/tambahGuru') ?>" method="post">
 
                                                 <div class="form-group">
                                                     <label for="waliKelas" class="form-control-label">Nama</label>
@@ -149,10 +151,11 @@
                                                     <input type="password" name="password" id="" class="form-control">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="waliKelas" class="form-control-label">Kelas</label>
+                                                    <label for="waliKelas" class="form-control-label">Kelas Bimbingan</label>
                                                     <select name="kelas" id="jarumname" class="form-control">
                                                         <option value="">----</option>
-                                                        <?php foreach ($listkelas as $kls): ?>
+                                                        <option value="">Tidak Ada</option>
+                                                        <?php foreach ($kelas as $kls): ?>
                                                             <option value="<?= $kls['id'] ?>"><?= $kls['nama'] ?></option>
                                                         <?php endforeach ?>
                                                     </select>
@@ -160,12 +163,13 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" id="" class="btn btn-info">Pindah</button>
+                                            <button type="submit" id="" class="btn btn-info">Kirim</button>
                                         </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModal" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -174,7 +178,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="<?= base_url($role . '/editSiswa') ?>" method="post">
+                                            <form action="<?= base_url($role . '/editGuru') ?>" method="post">
 
                                                 <div class="form-group">
                                                     <label for="waliKelas" class="form-control-label">Nama</label>
@@ -231,17 +235,20 @@
             });
             $('.edit-btn').click(function() {
                 var id = $(this).data('id');
-                var nama = $(this).data('nama');
+                var guru = $(this).data('guru');
                 var email = $(this).data('email');
+                var password = $(this).data('password');
+                var kelas = $(this).data('kelas');
 
 
                 $('#editModal').find('input[name="id"]').val(id);
-                $('#editModal').find('input[name="nama"]').val(nama);
+                $('#editModal').find('input[name="nama"]').val(guru);
                 $('#editModal').find('input[name="email"]').val(email);
-
+                $('#editModal').find('input[name="password"]').val(password);
+                $('#editModal').find('input[name="kelas"]').val(kelas);
 
                 $('#editModal').modal('show');
-                $('#editModal').find('form').attr('action', '<?= base_url($role . '/editSiswa') ?>');
+                $('#editModal').find('form').attr('action', '<?= base_url($role . '/editGuru') ?>');
 
             });
 

@@ -20,6 +20,16 @@ $routes->group('operator', ['filter' => 'role:operator'], function ($routes) {
     $routes->post('deleteSiswa', 'OperatorController::deleteSiswa');
     $routes->post('editSiswa', 'OperatorController::editSiswa');
 
+    $routes->get('dataguru', 'OperatorController::guru');
+    $routes->post('tambahGuru', 'OperatorController::tambahGuru');
+    $routes->post('deleteGuru', 'OperatorController::deleteGuru');
+    $routes->post('editGuru', 'OperatorController::editGuru');
+
+    $routes->get('datamapel', 'MapelController::index');
+    $routes->get('mapelPerkelas', 'MapelController::mapelKelas');
+    $routes->post('tambahMapel', 'MapelController::tambahMapel');
+    $routes->post('deleteMapel', 'MapelController::deleteMapel');
+    $routes->post('editMapel', 'MapelController::editMapel');
 
 
     $routes->get('datakelas', 'OperatorController::kelas');

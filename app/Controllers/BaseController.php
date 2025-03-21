@@ -10,6 +10,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use App\Models\KelasModel;
 use App\Models\UserModel;
+use App\Models\MapelModel;
 
 
 /**
@@ -28,6 +29,7 @@ abstract class BaseController extends Controller
     protected $db;
     protected $role;
     protected $kelas;
+    protected $mapel;
     public function __construct()
     {
         // Load session
@@ -37,6 +39,7 @@ abstract class BaseController extends Controller
         $this->db = \Config\Database::connect();
         $this->kelas = new KelasModel();
         $this->user = new UserModel();
+        $this->mapel = new MapelModel();
     }
     /**
      * Instance of the main Request object.

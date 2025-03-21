@@ -61,12 +61,14 @@ class OperatorController extends BaseController
     public function editKelas()
     {
         $id = $this->request->getPost('id');
+        $idWali = $this->request->getPost('wali_kelas');
         $input = [
             'nama' => $this->request->getPost('nama'),
-            'wali_kelas' => $this->request->getPost('wali_kelas')
+            'wali_kelas' => $idWali
         ];
 
         $proccess = $this->kelas->update($id, $input);
+        $walikelas = $this->user->update($idWali, ['kelas_id' => $id]);
 
         if ($proccess) {
             return redirect()->to(base_url($this->role . '/datakelas/'))->withInput()->with('success', 'Data Berhasil Di Edit');
@@ -152,6 +154,67 @@ class OperatorController extends BaseController
         $proccess = $this->user->update($id, $input);
 
         if ($proccess) {
+            return redirect()->back()->withInput()->with('success', 'Data Berhasil Di Edit');
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Data Gagal Di Edit');
+        }
+    }
+    public function guru()
+    {
+        $kelas = $this->kelas->getKelas();
+        $guru = $this->user->getGuru();
+        $listkelas = $this->kelas->getKelas();
+
+        $data = [
+            'title' => 'Sistem Ujian',
+            'kelas' => $kelas,
+            'role' => $this->role,
+            'guru' => $guru,
+            'listkelas' => $kelas,
+        ];
+        return view($this->role . '/guru/index', $data);
+    }
+    public function tambahGuru()
+    {
+        $nama = $this->request->getPost('nama');
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+        $kelas = $this->request->getPost('kelas');
+
+        $input = [
+            'nama'     => trim($nama),
+            'email'    => trim($email),
+            'password' => password_hash(trim($password), PASSWORD_BCRYPT),
+            'kelas_id'    => $kelas ?? null,
+            'role' => 'guru'
+        ];
+        $prosses = $this->user->insert($input);
+        $idGuruBaru = $this->user->insertID();
+        if ($kelas != null && $idGuruBaru) {
+            $this->kelas->update($kelas, ['wali_kelas' => $idGuruBaru]);
+        }
+        if ($prosses) {
+            return redirect()->to(base_url($this->role . '/dataguru/'))->withInput()->with('success', 'Data Berhasil Di input');
+        } else {
+            return redirect()->to(base_url($this->role . '/dataguru/'))->withInput()->with('error', 'Data Gagal Di input');
+        }
+    }
+    public function editGuru()
+    {
+        $id = $this->request->getPost('id');
+        $kelas = $this->request->getPost('kelas_id');
+        $input = [
+            'nama' => $this->request->getPost('nama'),
+            'email' => $this->request->getPost('email'),
+            'password' => $this->request->getPost('password'),
+            'kelas_id' => $kelas,
+        ];
+
+
+        $proccess = $this->user->update($id, $input);
+
+        if ($proccess) {
+            $this->kelas->update($kelas, ['wali_kelas' => $id]);
             return redirect()->back()->withInput()->with('success', 'Data Berhasil Di Edit');
         } else {
             return redirect()->back()->withInput()->with('error', 'Data Gagal Di Edit');

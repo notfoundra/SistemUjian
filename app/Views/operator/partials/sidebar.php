@@ -61,7 +61,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('operator/datasiswa') ?>" class="nav-link <?= set_active('datamapel') ?>">
+                <a href="<?= base_url('operator/datamapel') ?>" class="nav-link <?= set_active('datamapel') ?>">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>office</title>
@@ -79,7 +79,7 @@
                             </g>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Data Kelas</span>
+                    <span class="nav-link-text ms-1">Mata Pelajaran</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -105,7 +105,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="<?= base_url('operator/datasiswa') ?>" class="nav-link <?= set_active('dataguru') ?>">
+                <a href="<?= base_url('operator/dataguru') ?>" class="nav-link <?= set_active('dataguru') ?>">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                         <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>office</title>
