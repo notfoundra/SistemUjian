@@ -37,7 +37,9 @@ $routes->group('operator', ['filter' => 'role:operator'], function ($routes) {
     $routes->post('tambahKelas', 'OperatorController::tambahKelas');
     $routes->post('editKelas', 'OperatorController::editKelas');
 
-    $routes->get('dataMapel', 'OperatorController::kelas');
+    $routes->get('jadwalujian', 'UjianController::index');
+    $routes->post('tambahIndukUjian', 'UjianController::tambahIndukUjian');
+    $routes->post('ujian/(:any)', 'UjianController::ujian/$1');
 });
 
 $routes->group('dashboard', ['filter' => 'role:guru'], function ($routes) {

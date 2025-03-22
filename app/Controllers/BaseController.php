@@ -11,6 +11,7 @@ use Psr\Log\LoggerInterface;
 use App\Models\KelasModel;
 use App\Models\UserModel;
 use App\Models\MapelModel;
+use App\Models\UjianIndukModel;
 
 
 /**
@@ -30,6 +31,7 @@ abstract class BaseController extends Controller
     protected $role;
     protected $kelas;
     protected $mapel;
+    protected $ujianInduk;
     public function __construct()
     {
         // Load session
@@ -40,6 +42,7 @@ abstract class BaseController extends Controller
         $this->kelas = new KelasModel();
         $this->user = new UserModel();
         $this->mapel = new MapelModel();
+        $this->ujianInduk = new UjianIndukModel();
     }
     /**
      * Instance of the main Request object.
