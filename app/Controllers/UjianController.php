@@ -33,4 +33,26 @@ class UjianController extends BaseController
             return redirect()->to(base_url($this->role . '/jadwalujian/'))->withInput()->with('error', 'Data Gagal Di Input');
         }
     }
+    public function ujian($idInduk)
+    {
+        $listUjian = $this->ujian->getListUjian($idInduk);
+        $groupedData = [];
+
+        foreach ($listUjian as $row) {
+            $kelas = $row['kelas'];
+            $tanggal = date('D, d M Y', strtotime($row['tanggal']));
+            $jam = date('H:i:s', strtotime($row['tanggal'])); // Format Jam:Menit:Detik
+
+            // Masukkan ke struktur yang diinginkan
+            $groupedData[$kelas][$tanggal][] = $row['mapel'] . ' (' . $jam . ')';
+        }
+        dd($groupedData);
+        $data = [
+            'title' => 'Sistem Ujian',
+            'ujian' => $listInduk,
+            'role' => $this->role,
+        ];
+
+        return view($this->role . '/ujian/index', $data);
+    }
 }

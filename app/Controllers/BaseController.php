@@ -12,6 +12,7 @@ use App\Models\KelasModel;
 use App\Models\UserModel;
 use App\Models\MapelModel;
 use App\Models\UjianIndukModel;
+use App\Models\UjianModel;
 
 
 /**
@@ -32,6 +33,8 @@ abstract class BaseController extends Controller
     protected $kelas;
     protected $mapel;
     protected $ujianInduk;
+    protected $ujian;
+
     public function __construct()
     {
         // Load session
@@ -43,6 +46,7 @@ abstract class BaseController extends Controller
         $this->user = new UserModel();
         $this->mapel = new MapelModel();
         $this->ujianInduk = new UjianIndukModel();
+        $this->ujian = new UjianModel();
     }
     /**
      * Instance of the main Request object.
