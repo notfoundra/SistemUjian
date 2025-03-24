@@ -41,18 +41,24 @@ class UjianController extends BaseController
         foreach ($listUjian as $row) {
             $kelas = $row['kelas'];
             $tanggal = date('D, d M Y', strtotime($row['tanggal']));
-            $jam = date('H:i:s', strtotime($row['tanggal'])); // Format Jam:Menit:Detik
+            $jam = date('H:i', strtotime($row['tanggal'])); // Format Jam:Menit
 
             // Masukkan ke struktur yang diinginkan
-            $groupedData[$kelas][$tanggal][] = $row['mapel'] . ' (' . $jam . ')';
+            $groupedData[$kelas][$tanggal][] = [
+                'id_ujian' => $row['id'],
+                'mapel' => $row['mapel'],
+                'jam' => $jam,
+                'durasi' => $row['durasi']
+            ];
         }
-        dd($groupedData);
+        // return response()->setJSON($groupedData);
+        // dd($groupedData);
         $data = [
             'title' => 'Sistem Ujian',
-            'ujian' => $listInduk,
+            'ujian' => $groupedData,
             'role' => $this->role,
         ];
 
-        return view($this->role . '/ujian/index', $data);
+        return view($this->role . '/ujian/child', $data);
     }
 }

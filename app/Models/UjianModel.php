@@ -46,7 +46,7 @@ class UjianModel extends Model
 
     public function getListUjian($idInduk)
     {
-        return $this->select('ujian.nama, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel')
+        return $this->select('ujian.id, ujian.nama, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel')
             ->join('kelas', 'kelas.id=ujian.kelas_id', 'left')
             ->join('mapel', 'mapel.id=ujian.mapel_id', 'left')
             ->where('id_ujian_induk', $idInduk)
