@@ -41,4 +41,11 @@ class MapelController extends BaseController
         $mapel = $this->mapel->getMapelPerkelas($id);
         return $this->response->setJSON($mapel);
     }
+    public function getMapelByKelas($kelas_id)
+    {
+
+        $mapelList = $this->mapel->where('kelas_id', $kelas_id)->findAll();
+
+        return $this->response->setJSON($mapelList);
+    }
 }

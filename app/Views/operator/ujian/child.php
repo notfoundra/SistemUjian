@@ -64,36 +64,35 @@
                         <h4><?= htmlspecialchars($kelas); ?></h4> <!-- Nama Kelas -->
                     </div>
                     <div class="card-body p-3">
-                        <table class="table" id="Datatable">
+                        <table class="table">
                             <thead>
                                 <tr>
-
-                                    <?php foreach ($tanggalUjian as $tanggal => $items): ?>
+                                    <?php foreach (array_keys($tanggalUjian) as $tanggal): ?>
                                         <th><?= htmlspecialchars($tanggal); ?></th>
                                     <?php endforeach; ?>
                                 </tr>
                             </thead>
                             <tbody>
-
-                                <?php foreach ($tanggalUjian as $tanggal => $items): ?>
-                                    <?php foreach ($items as $data): ?>
-                                        <tr>
-                                            <td>
-                                                <input type="text " value="<?= $data['id_ujian'] ?>" hidden>
-                                                Mapel : <?= $data['mapel'] ?><br>
-                                                Jam : <?= $data['jam'] ?><br>
-                                                Durasi :<?= $data['durasi'] ?><br>
-                                                <a href="" class="btn btn-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                                <a href="" class="btn btn-warning">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-
-                                            </td>
-                                        </tr>
+                                <tr>
+                                    <?php foreach ($tanggalUjian as $tanggal => $items): ?>
+                                        <td>
+                                            <?php foreach ($items as $data): ?>
+                                                <div class="mb-2 p-2 border rounded">
+                                                    <strong>Mapel :</strong> <?= $data['mapel'] ?><br>
+                                                    <strong>Jam :</strong> <?= $data['jam'] ?><br>
+                                                    <strong>Durasi :</strong> <?= $data['durasi'] ?> menit<br>
+                                                    <a href="#" class="btn btn-danger btn-sm  deleteBtn"
+                                                        data-id="<?= $data['id_ujian'] ?>">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-warning btn-sm editBtn" data-id="<?= $data['id_ujian'] ?>">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </td>
                                     <?php endforeach; ?>
-                                <?php endforeach; ?>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -112,20 +111,32 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<?= base_url($role . '/tambahIndukUjian') ?>" method="post">
+                    <form action="<?= base_url($role . '/tambahUjian') ?>" method="post">
+                        <div class="form-group">
+                            <label for="waliKelas" class="form-control-label">Kelas</label>
+                            <input type="text" name="id_induk" id="" value="<?= $idInduk ?>" hidden>
+                            <select name="kelas" id="kelas" class="form-control" onchange="getMapel()">
+                                <option value="">----</option>
+                                <?php foreach ($listKelas as $kls): ?>
+                                    <option value="<?= $kls['id'] ?>"><?= $kls['nama'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="waliKelas" class="form-control-label">Mapel</label>
+                            <select name="mapel" id="mapel" class="form-control">
+                                <option value="">----</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="waliKelas" class="form-control-label">Waktu</label> <br>
+                            <input type="datetime-local" name="waktu" id="waktu" class="form-control">
+                        </div>
 
                         <div class="form-group">
-                            <label for="waliKelas" class="form-control-label">Judul</label>
-                            <input type="text" name="judul" id="" class="form-control" placeholder="ujian tengah/akhir semester">
-                        </div>
-                        <div class="form-group">
-                            <label for="waliKelas" class="form-control-label">Tahun Ajaran</label>
-                            <input type="text" name="tahun" id="" class="form-control" placeholder="masukan tahun ajaran seperti 2025-2026">
-                        </div>
-                        <div class="form-group">
-                            <label for="waliKelas" class="form-control-label">Semester</label> <br>
-                            <input type="radio" name="semester" value="1" checked> Semester 1
-                            <input type="radio" name="semester" value="2"> Semester 2 <br>
+                            <label for="waliKelas" class="form-control-label">Durasi</label> <br>
+                            <input type="number" name="durasi" id="" class="form-control" placeholder="menit">
                         </div>
 
                 </div>
@@ -137,9 +148,221 @@
             </div>
         </div>
     </div>
+    <!-- Modal Edit Ujian -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Ujian</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <input type="hidden" id="edit_id" name="id">
+
+                        <div class="form-group">
+                            <label for="waliKelas" class="form-control-label">Kelas</label>
+                            <input type="text" name="id_induk" id="" value="<?= $idInduk ?>" hidden>
+                            <select name="kelas" id="kelasEdit" class="form-control" onchange="getMapelEdit()">
+                                <option value="">----</option>
+                                <?php foreach ($listKelas as $kls): ?>
+                                    <option value="<?= $kls['id'] ?>"><?= $kls['nama'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="waliKelas" class="form-control-label">Mapel</label>
+                            <select name="mapel" id="mapelEdit" class="form-control">
+                                <option value="">----</option>
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit_tanggal">Tanggal</label>
+                            <input type="datetime-local" id="edit_tanggal" name="tanggal" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit_durasi">Durasi</label>
+                            <input type="number" id="edit_durasi" name="durasi" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Delete Konfirmasi -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Hapus Ujian</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin menghapus ujian ini?</p>
+                    <input type="hidden" id="delete_id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable();
         });
     </script>
+    <script>
+        function getMapel() {
+            var kelas_id = document.getElementById("kelas").value; // Ambil ID kelas yang dipilih
+            console.log(kelas_id)
+            if (kelas_id === "") {
+                document.getElementById("mapel").innerHTML = "<option value=''>----</option>";
+                return;
+            }
+
+            fetch("<?= base_url($role . '/getMapelByKelas') ?>/" + kelas_id)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Cek apakah data muncul di console
+
+                    let mapelSelect = document.getElementById("mapel");
+
+                    // Reset opsi mapel
+                    mapelSelect.innerHTML = "<option value=''>----</option>";
+
+                    // Tambahkan opsi dari hasil AJAX
+                    data.forEach(mapel => {
+                        let option1 = document.createElement("option");
+
+                        option1.value = mapel.id;
+                        option1.textContent = mapel.nama;
+                        mapelSelect.appendChild(option1);
+                    });
+                })
+                .catch(error => console.error("Error fetching mapel:", error));
+
+        }
+
+        function getMapelEdit() {
+            var kelas_id = document.getElementById("kelasEdit").value;
+
+            if (kelas_id === "") {
+                document.getElementById("mapelEdit").innerHTML = "<option value=''>----</option>";
+                return;
+            }
+
+            fetch("<?= base_url($role . '/getMapelByKelas') ?>/" + kelas_id)
+                .then(response => response.json())
+                .then(data => {
+                    let mapelSelect = document.getElementById("mapelEdit");
+
+                    mapelSelect.innerHTML = "<option value=''>----</option>";
+
+                    data.forEach(mapel => {
+                        let option = document.createElement("option");
+                        option.value = mapel.id;
+                        option.textContent = mapel.nama;
+                        mapelSelect.appendChild(option);
+                    });
+                }).catch(error => console.error("Error fetching mapel:", error));
+        }
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            // EDIT: Ambil data dan tampilkan modal edit
+            $(".editBtn").click(function() {
+                let id = $(this).data("id");
+                $.ajax({
+                    url: "<?= base_url($role . '/getUjian') ?>/" + id,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.status !== 'error') {
+                            $("#edit_id").val(data.id);
+                            $("#edit_tanggal").val(data.tanggal);
+                            $("#edit_durasi").val(data.durasi);
+                            $("#editModal").modal("show");
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops!',
+                                text: 'Data tidak ditemukan.',
+                            });
+                        }
+                    }
+                });
+            });
+
+            // SUBMIT Edit Form
+            $("#editForm").submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "<?= base_url($role . '/updateUjian') ?>",
+                    type: "POST",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data berhasil diperbarui!',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
+                    }
+                });
+            });
+
+            // DELETE: Tampilkan modal konfirmasi
+            $(".deleteBtn").click(function() {
+                let id = $(this).data("id");
+                $("#delete_id").val(id);
+                $("#deleteModal").modal("show");
+            });
+
+            // KONFIRMASI DELETE
+            $("#confirmDelete").click(function() {
+                let id = $("#delete_id").val();
+                $.ajax({
+                    url: "<?= base_url($role . '/deleteujian') ?>/" + id,
+                    type: "POST",
+                    success: function(response) {
+                        if (response.status === 'deleted') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: 'Data berhasil dihapus!',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+
+
+
     <?= $this->endSection() ?>

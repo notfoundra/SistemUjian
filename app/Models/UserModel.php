@@ -56,6 +56,15 @@ class UserModel extends Model
         return $this->select('users.nama,users.email,users.id, kelas.nama as kelas')
             ->join('kelas', 'kelas.id=users.kelas_id', 'left')
             ->where('kelas_id', $id)
+            ->where('role', 'siswa')
             ->findAll();
+    }
+    public function getTotalSiswa()
+    {
+        return $this->where('role', 'siswa')->countAllResults();
+    }
+    public function getTotalGuru()
+    {
+        return $this->where('role', 'guru')->countAllResults();
     }
 }

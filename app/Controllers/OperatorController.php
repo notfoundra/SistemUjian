@@ -11,10 +11,18 @@ class OperatorController extends BaseController
 
     public function index()
     {
+        $totalSiswa = $this->user->getTotalSiswa();
+        $totalGuru = $this->user->getTotalGuru();
+        $scheduled = $this->ujian->getTotalSchedule();
+        $active = $this->ujian->getTotalActive();
 
         $data = [
             'title' => 'Sistem Ujian',
             'role' => $this->role,
+            'totalSiswa' => $totalSiswa,
+            'totalGuru' => $totalGuru,
+            'scheduled' => $scheduled,
+            'active' => $active,
         ];
 
         return view($this->role . '/index', $data);

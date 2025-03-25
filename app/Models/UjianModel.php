@@ -12,7 +12,7 @@ class UjianModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['id_ujian_induk', 'mapel_id', 'kelas_id', 'nama', 'tanggal', 'durasi'];
+    protected $allowedFields    = ['id_ujian_induk', 'mapel_id', 'kelas_id', 'tanggal', 'durasi'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -46,11 +46,38 @@ class UjianModel extends Model
 
     public function getListUjian($idInduk)
     {
-        return $this->select('ujian.id, ujian.nama, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel')
+        return $this->select('ujian.id, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel')
             ->join('kelas', 'kelas.id=ujian.kelas_id', 'left')
             ->join('mapel', 'mapel.id=ujian.mapel_id', 'left')
             ->where('id_ujian_induk', $idInduk)
             ->groupBy('ujian.kelas_id, ujian.tanggal, ujian.mapel_id')
             ->findAll();
+    }
+    public function getUjianGuru($id)
+    {
+        return $this->select('ujian.id, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel')
+            ->join('kelas', 'kelas.id=ujian.kelas_id', 'left')
+            ->join('mapel', 'mapel.id=ujian.mapel_id', 'left')
+            ->where('mapel.guru', $id)
+            ->groupBy('ujian.kelas_id, ujian.tanggal, ujian.mapel_id')
+            ->findAll();
+    }
+    public function getUjianById($id)
+    {
+        return $this->select('ujian.id, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel')
+            ->join('kelas', 'kelas.id=ujian.kelas_id', 'left')
+            ->join('mapel', 'mapel.id=ujian.mapel_id', 'left')
+            ->where('ujian.id', $id)
+            ->groupBy('ujian.kelas_id, ujian.tanggal, ujian.mapel_id')
+            ->first();
+    }
+    public function getNilaiPerkelas($kelas) {}
+    public function getTotalSchedule()
+    {
+        return $this->where('status', 'scheduled')->countAllResults();
+    }
+    public function getTotalActive()
+    {
+        return $this->where('status', 'active')->countAllResults();
     }
 }

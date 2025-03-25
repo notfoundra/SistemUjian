@@ -34,12 +34,16 @@ abstract class BaseController extends Controller
     protected $mapel;
     protected $ujianInduk;
     protected $ujian;
+    protected $uid;
+    protected $uname;
 
     public function __construct()
     {
         // Load session
         $this->session = \Config\Services::session();
         $this->role = $this->session->get('role');
+        $this->uid = $this->session->get('user_id');
+        $this->uname = $this->session->get('user');
         // Load database connection
         $this->db = \Config\Database::connect();
         $this->kelas = new KelasModel();

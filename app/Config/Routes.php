@@ -8,7 +8,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'AuthController::index');
 $routes->get('/login', 'AuthController::index');
 $routes->post('auth/attemptLogin', 'AuthController::attemptLogin');
-$routes->get('logout', 'AuthController::logout');
+$routes->post('logout', 'AuthController::logout');
 
 
 $routes->group('operator', ['filter' => 'role:operator'], function ($routes) {
@@ -30,6 +30,7 @@ $routes->group('operator', ['filter' => 'role:operator'], function ($routes) {
     $routes->post('tambahMapel', 'MapelController::tambahMapel');
     $routes->post('deleteMapel', 'MapelController::deleteMapel');
     $routes->post('editMapel', 'MapelController::editMapel');
+    $routes->get('getMapelByKelas/(:any)', 'MapelController::getMapelByKelas/$1');
 
 
     $routes->get('datakelas', 'OperatorController::kelas');
@@ -40,10 +41,16 @@ $routes->group('operator', ['filter' => 'role:operator'], function ($routes) {
     $routes->get('jadwalujian', 'UjianController::index');
     $routes->post('tambahIndukUjian', 'UjianController::tambahIndukUjian');
     $routes->get('ujian/(:any)', 'UjianController::ujian/$1');
+    $routes->post('tambahUjian', 'UjianController::tambahujian');
+    $routes->get('getUjian/(:any)', 'UjianController::getUjian/$1');
+    $routes->post('deleteujian/(:any)', 'UjianController::deleteujian/$1');
+    $routes->post('updateUjian', 'UjianController::updateUjian');
+    $routes->get('hasilujian', 'UjianController::hasilujian');
+    $routes->get('hasilujianPerkelas/(:any)', 'UjianController::hasilujianPerkelas/$1');
 });
 
-$routes->group('dashboard', ['filter' => 'role:guru'], function ($routes) {
-    $routes->get('guru', 'Dashboard::guru');
+$routes->group('guru', ['filter' => 'role:guru'], function ($routes) {
+    $routes->get('', 'GuruController::index');
 });
 
 $routes->group('dashboard', ['filter' => 'role:siswa'], function ($routes) {
