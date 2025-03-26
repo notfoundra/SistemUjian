@@ -51,6 +51,7 @@ $routes->group('operator', ['filter' => 'role:operator'], function ($routes) {
 
 $routes->group('guru', ['filter' => 'role:guru'], function ($routes) {
     $routes->get('', 'GuruController::index');
+    $routes->get('kelolaSoal/(:any)', 'GuruController::kelolaSoal/$1');
 });
 
 $routes->group('dashboard', ['filter' => 'role:siswa'], function ($routes) {

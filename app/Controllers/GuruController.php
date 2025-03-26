@@ -36,4 +36,17 @@ class GuruController extends BaseController
 
         return view($this->role . '/index', $data);
     }
+    public function kelolaSoal($idUjian)
+    {
+
+        $data = [
+            'title' => 'Sistem Ujian',
+            'role' => $this->role,
+            'user' => $this->uname,
+            'idUjian' => $idUjian,
+            'soal' => $soal
+        ];
+
+        return view($this->role . '/ujian/kelolasoal', $data);
+    }
 }
