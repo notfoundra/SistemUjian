@@ -63,6 +63,6 @@ $routes->group('guru', ['filter' => 'role:guru'], function ($routes) {
     $routes->post('importSoal', 'SoalController::importSoal');
 });
 
-$routes->group('dashboard', ['filter' => 'role:siswa'], function ($routes) {
-    $routes->get('siswa', 'Dashboard::siswa');
+$routes->group('siswa', ['filter' => 'role:siswa'], function ($routes) {
+    $routes->get('', 'SiswaController::siswa');
 });
