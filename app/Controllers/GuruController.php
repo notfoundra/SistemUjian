@@ -38,13 +38,15 @@ class GuruController extends BaseController
     }
     public function kelolaSoal($idUjian)
     {
-
+        $soal = $this->soal->getSoal($idUjian);
+        $ujian = $this->ujian->getUjianById($idUjian);
         $data = [
             'title' => 'Sistem Ujian',
             'role' => $this->role,
             'user' => $this->uname,
             'idUjian' => $idUjian,
-            'soal' => $soal
+            'soal' => $soal,
+            'ujian' => $ujian,
         ];
 
         return view($this->role . '/ujian/kelolasoal', $data);

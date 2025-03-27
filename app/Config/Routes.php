@@ -52,6 +52,15 @@ $routes->group('operator', ['filter' => 'role:operator'], function ($routes) {
 $routes->group('guru', ['filter' => 'role:guru'], function ($routes) {
     $routes->get('', 'GuruController::index');
     $routes->get('kelolaSoal/(:any)', 'GuruController::kelolaSoal/$1');
+    $routes->get('download-template', 'SoalController::downloadtemplate');
+
+
+    $routes->post('tambahSoal', 'SoalController::tambahSoal');
+    $routes->post('deleteSoal', 'SoalController::deleteSoal');
+    $routes->post('deleteAllSoal', 'SoalController::deleteAll');
+    $routes->post('getSoal', 'SoalController::getSoal');
+    $routes->post('editSoal', 'SoalController::editSoal');
+    $routes->post('importSoal', 'SoalController::importSoal');
 });
 
 $routes->group('dashboard', ['filter' => 'role:siswa'], function ($routes) {
