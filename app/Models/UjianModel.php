@@ -53,6 +53,16 @@ class UjianModel extends Model
             ->groupBy('ujian.kelas_id, ujian.tanggal, ujian.mapel_id')
             ->findAll();
     }
+    public function getUjianSiswa($id)
+    {
+        return $this->select('ujian.id, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel')
+            ->join('kelas', 'kelas.id=ujian.kelas_id', 'left')
+            ->join('mapel', 'mapel.id=ujian.mapel_id', 'left')
+            ->join('users', 'users.kelas_id=kelas.id', 'left')
+            ->where('users.id', $id)
+            ->groupBy('ujian.kelas_id, ujian.tanggal, ujian.mapel_id')
+            ->findAll();
+    }
     public function getUjianGuru($id)
     {
         return $this->select('ujian.id, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel')
@@ -75,6 +85,22 @@ class UjianModel extends Model
     public function getTotalSchedule()
     {
         return $this->where('status', 'scheduled')->countAllResults();
+    }
+    public function getScheduledPersiswa($id)
+    {
+        return $this->join('kelas', 'kelas.id=ujian.kelas_id', 'left')
+            ->join('mapel', 'mapel.id=ujian.mapel_id', 'left')
+            ->join('users', 'users.kelas_id=kelas.id', 'left')
+            ->where('users.id', $id)
+            ->where('status', 'scheduled')->countAllResults();
+    }
+    public function getExpiredPersiswa($id)
+    {
+        return $this->join('kelas', 'kelas.id=ujian.kelas_id', 'left')
+            ->join('mapel', 'mapel.id=ujian.mapel_id', 'left')
+            ->join('users', 'users.kelas_id=kelas.id', 'left')
+            ->where('users.id', $id)
+            ->where('status', 'expired')->countAllResults();
     }
     public function getTotalActive()
     {

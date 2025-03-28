@@ -13,6 +13,8 @@ use App\Models\UserModel;
 use App\Models\MapelModel;
 use App\Models\UjianIndukModel;
 use App\Models\UjianModel;
+use App\Models\SoalModel;
+use App\Models\JawabanModel;
 
 
 /**
@@ -36,6 +38,8 @@ abstract class BaseController extends Controller
     protected $ujian;
     protected $uid;
     protected $uname;
+    protected $soal;
+    protected $jawaban;
 
     public function __construct()
     {
@@ -51,6 +55,8 @@ abstract class BaseController extends Controller
         $this->mapel = new MapelModel();
         $this->ujianInduk = new UjianIndukModel();
         $this->ujian = new UjianModel();
+        $this->soal = new SoalModel();
+        $this->jawaban = new JawabanModel();
     }
     /**
      * Instance of the main Request object.

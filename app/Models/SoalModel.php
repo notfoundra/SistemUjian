@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class SoalModel extends Model
 {
-    protected $table            = 'soals';
+    protected $table            = 'soal';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['ujian_id', 'pertanyaan'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,4 +43,36 @@ class SoalModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getSoal($idUjian)
+    {
+        $soal = $this->select('soal.id, soal.pertanyaan, jawaban.id as jawabanId, jawaban.jawaban, jawaban.benar')
+            ->join('jawaban', 'jawaban.soal_id = soal.id', 'left')
+            ->where('soal.ujian_id', $idUjian)
+            ->findAll();
+
+        $groupedData = [];
+
+        foreach ($soal as $sol) {
+            $key = $sol['id']; // Gunakan ID soal sebagai kunci unik
+
+            if (!isset($groupedData[$key])) {
+                $groupedData[$key] = [
+                    'id' => $sol['id'],
+                    'pertanyaan' => $sol['pertanyaan'],
+                    'jawaban' => [] // Buat array untuk menampung semua jawaban
+                ];
+            }
+
+            // Tambahkan semua jawaban ke dalam array jawaban
+            if ($sol['jawabanId'] !== null) {
+                $groupedData[$key]['jawaban'][] = [
+                    'idJawab' => $sol['jawabanId'],
+                    'jawaban' => $sol['jawaban'],
+                    'benar' => $sol['benar']
+                ];
+            }
+        }
+        return $groupedData;
+    }
 }

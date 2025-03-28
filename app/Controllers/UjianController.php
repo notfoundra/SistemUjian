@@ -144,4 +144,20 @@ class UjianController extends BaseController
 
         return view($this->role . '/siswa/perkelas', $data);
     }
+
+    public function startTest($idUjian)
+    {
+        $soal = $this->soal->getSoal($idUjian);
+        $ujian = $this->ujian->getUjianById($idUjian);
+        $data = [
+            'title' => 'Sistem Ujian',
+            'role' => $this->role,
+            'user' => $this->uname,
+            'idUjian' => $idUjian,
+            'soal' => $soal,
+            'ujian' => $ujian,
+        ];
+
+        return view($this->role . '/ujian/test', $data);
+    }
 }

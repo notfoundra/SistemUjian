@@ -5,11 +5,14 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class GuruController extends BaseController
+class SiswaController extends BaseController
 {
     public function index()
     {
+
         $uid = $this->uid;
+        $scheduled = $this->ujian->getScheduledPersiswa($uid);
+        $expired = $this->ujian->getExpiredPersiswa($uid);
         $listUjian = $this->ujian->getUjianSiswa($uid);
         $groupedData = [];
         $listKelas = $this->kelas->getKelas();
@@ -31,24 +34,11 @@ class GuruController extends BaseController
             'title' => 'Sistem Ujian',
             'role' => $this->role,
             'user' => $this->uname,
-            'ujian' => $groupedData
+            'ujian' => $groupedData,
+            'scheduled' => $scheduled,
+            'expired' => $expired,
         ];
 
         return view($this->role . '/index', $data);
-    }
-    public function kelolaSoal($idUjian)
-    {
-        $soal = $this->soal->getSoal($idUjian);
-        $ujian = $this->ujian->getUjianById($idUjian);
-        $data = [
-            'title' => 'Sistem Ujian',
-            'role' => $this->role,
-            'user' => $this->uname,
-            'idUjian' => $idUjian,
-            'soal' => $soal,
-            'ujian' => $ujian,
-        ];
-
-        return view($this->role . '/ujian/kelolasoal', $data);
     }
 }
