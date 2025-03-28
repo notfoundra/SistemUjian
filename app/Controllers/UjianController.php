@@ -144,4 +144,6 @@ class UjianController extends BaseController
 
         return view($this->role . '/siswa/perkelas', $data);
     }
+
+    public function startTest($idUjian) {}
 }

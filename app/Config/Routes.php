@@ -64,5 +64,6 @@ $routes->group('guru', ['filter' => 'role:guru'], function ($routes) {
 });
 
 $routes->group('siswa', ['filter' => 'role:siswa'], function ($routes) {
-    $routes->get('', 'SiswaController::siswa');
+    $routes->get('', 'SiswaController::index');
+    $routes->get('startTest/(:any)', 'UjianController::startTest/$1');
 });
