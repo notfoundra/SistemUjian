@@ -38,7 +38,7 @@ class GuruController extends BaseController
     }
     public function kelolaSoal($idUjian)
     {
-
+        $soal = $this->soal;
         $data = [
             'title' => 'Sistem Ujian',
             'role' => $this->role,
