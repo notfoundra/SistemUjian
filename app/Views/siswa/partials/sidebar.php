@@ -5,12 +5,17 @@
             <div class="icon icon-shape bg-info shadow text-center border-radius-lg" style="font-size: 17px;">
                 <i class="fas fa-school text-lg opacity-10" aria-hidden="true"></i>
             </div>
-            <span class="ms-1 font-weight-bold" style="font-size: 20px;">Sistem Ujian</span>
+            <span class="ms-1 font-weight-bold" style="font-size: 20px;">Sistem Ujian</span><br>
+
         </a>
+
     </div>
     <hr class="horizontal dark mt-0">
     <div class="collapse navbar-collapse h-auto  w-auto " id="sidenav-collapse-main">
         <ul class="navbar-nav">
+            <div id="examTimer" class="alert-danger text-center mx-3 fs-4 d-none">
+                <h6 class="text-white"> Sisa Waktu: <span id="timeLeft"></span> </h6>
+            </div>
             <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Dashboard</h6>
 
             <li class="nav-item  <?= set_active('guru') ?>">

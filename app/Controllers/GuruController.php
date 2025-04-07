@@ -10,7 +10,7 @@ class GuruController extends BaseController
     public function index()
     {
         $uid = $this->uid;
-        $listUjian = $this->ujian->getUjianSiswa($uid);
+        $listUjian = $this->ujian->getUjianGuru($uid);
         $groupedData = [];
         $listKelas = $this->kelas->getKelas();
 

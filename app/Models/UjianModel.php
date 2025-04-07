@@ -106,4 +106,13 @@ class UjianModel extends Model
     {
         return $this->where('status', 'active')->countAllResults();
     }
+    public function getName($id)
+    {
+        return $this->select('ujian_induk.judul, ujian_induk.tahun_ajaran, mapel.nama as mapel, kelas.nama as kelas')
+            ->join('ujian_induk', 'ujian_induk.id=ujian.id_ujian_induk', 'left')
+            ->join('mapel', 'mapel.id=ujian.mapel_id', 'left')
+            ->join('kelas', 'kelas.id=ujian.kelas_id', 'left')
+            ->where('ujian.id', $id)
+            ->first();
+    }
 }

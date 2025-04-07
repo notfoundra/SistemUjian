@@ -73,6 +73,42 @@ class SoalModel extends Model
                 ];
             }
         }
-        return $groupedData;
+
+        // 1. Ambil array kunci soal
+        $soalKeys = array_keys($groupedData);
+
+        // 2. Acak urutan soal
+        $this->fisherYatesShuffle($soalKeys);
+
+        // 3. Buat array baru dengan urutan yang sudah diacak
+        $shuffledSoal = [];
+        foreach ($soalKeys as $key) {
+            $shuffledSoal[] = $groupedData[$key];
+
+            // 4. Acak jawaban di setiap soal
+            $this->fisherYatesShuffle($shuffledSoal[array_key_last($shuffledSoal)]['jawaban']);
+        }
+
+        return $shuffledSoal;
+    }
+    /**
+     * Fungsi untuk mengacak array menggunakan Fisher-Yates Shuffle secara eksplisit
+     */
+    private function fisherYatesShuffle(array &$array)
+    {
+        // 1. Buat array -> ini sudah tersedia dari parameter fungsi
+
+        // 2. Periksa kondisi: Loop berjalan selama indeks i >= 1
+        for ($i = count($array) - 1; $i >= 1; $i--) {
+            // 3. Pilih angka acak x dalam rentang 0 hingga i
+            $x = rand(0, $i);
+
+            // 4. Tukar elemen array[x] dengan array[i]
+            $temp = $array[$i];
+            $array[$i] = $array[$x];
+            $array[$x] = $temp;
+
+            // 5. Dekrementasi nilai indeks -> Sudah otomatis dalam loop
+        }
     }
 }

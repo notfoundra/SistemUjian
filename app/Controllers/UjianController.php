@@ -137,7 +137,7 @@ class UjianController extends BaseController
         $data = [
             'siswa' => $siswa,
             'kelas' => $kelas,
-            'listkelas' => $listkelas,
+            // 'listkelas' => $listkelas,
             'title' => 'Sistem Ujian',
             'role' => $this->role,
         ];
@@ -147,15 +147,18 @@ class UjianController extends BaseController
 
     public function startTest($idUjian)
     {
+        $namaUjian = $this->ujian->getName($idUjian);
         $soal = $this->soal->getSoal($idUjian);
         $ujian = $this->ujian->getUjianById($idUjian);
         $data = [
-            'title' => 'Sistem Ujian',
+            'title' => $namaUjian['judul'] . ' ' . $namaUjian['tahun_ajaran'],
             'role' => $this->role,
             'user' => $this->uname,
             'idUjian' => $idUjian,
             'soal' => $soal,
             'ujian' => $ujian,
+            'name' => $namaUjian,
+            'durasi' => $ujian['durasi']
         ];
 
         return view($this->role . '/ujian/test', $data);
