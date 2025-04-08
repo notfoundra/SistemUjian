@@ -61,6 +61,9 @@ $routes->group('guru', ['filter' => 'role:guru'], function ($routes) {
     $routes->post('getSoal', 'SoalController::getSoal');
     $routes->post('editSoal', 'SoalController::editSoal');
     $routes->post('importSoal', 'SoalController::importSoal');
+
+    $routes->get('hasilujian', 'UjianController::hasilujian');
+    $routes->get('hasilujianPerkelas/(:any)', 'UjianController::hasilujianPerkelas/$1');
 });
 
 $routes->group('siswa', ['filter' => 'role:siswa'], function ($routes) {

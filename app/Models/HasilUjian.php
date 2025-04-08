@@ -59,4 +59,8 @@ class HasilUjian extends Model
     {
         return $this->selectSum('nilai')->where('siswa_id', $id)->first()['nilai'];
     }
+    public function getNilai($ujianId, $siswaId)
+    {
+        return $this->where(['ujian_id' => $ujianId, 'siswa_id' => $siswaId])->first()['nilai'] ?? null;
+    }
 }

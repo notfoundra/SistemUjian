@@ -128,4 +128,11 @@ class UjianModel extends Model
             ->where('ujian.id', $id)
             ->first();
     }
+    public function getMapel($ujianId)
+    {
+        return $this->join('mapel', 'mapel.id = ujian.mapel_id', 'left')
+            ->where('ujian.id', $ujianId)
+            ->select('mapel.nama')
+            ->first()['nama'] ?? null;
+    }
 }

@@ -166,17 +166,46 @@ class UjianController extends BaseController
     }
     public function hasilujianPerkelas($kelas)
     {
-        $siswa = $this->user->getNilaiPerkelas($kelas);
+        // Ambil semua siswa di kelas
+        $siswa = $this->user->select('id,nama')->where('kelas_id', $kelas)->findAll();
+
+        // Ambil semua ujian untuk kelas ini
+        $ujian = $this->ujian->where('kelas_id', $kelas)->findAll();
+        $namaKelas = $this->kelas->find($kelas);
+        $listNilai = [];
+        $mapel = [];
+        foreach ($ujian as $uji) {
+            $ujianId = $uji['id'];
+            $mapel[$ujianId] = $this->ujian->getMapel($ujianId);
+        }
+        foreach ($siswa as $sis) {
+            $siswaID = $sis['id'];
+            $nilaiSiswa = [
+                'nama' => $sis['nama'],
+                'nilai' => []
+            ];
+
+
+            foreach ($ujian as $uji) {
+                $ujianId = $uji['id'];
+                $nilai = $this->nilai->getNilai($ujianId, $siswaID); // Asumsikan return angka atau null
+                $nilaiSiswa['nilai'][$ujianId] = $nilai ?? '-';
+            }
+            $listNilai[] = $nilaiSiswa;
+        }
+
         $data = [
-            'siswa' => $siswa,
-            'kelas' => $kelas,
-            // 'listkelas' => $listkelas,
+            'listNilai' => $listNilai,
+            'ujian' => $ujian,
+            'kelas' => $namaKelas['nama'],
             'title' => 'Sistem Ujian',
             'role' => $this->role,
+            'mapel' => $mapel,
         ];
 
-        return view($this->role . '/siswa/perkelas', $data);
+        return view($this->role . '/ujian/perkelas', $data);
     }
+
 
     public function startTest($idUjian)
     {
