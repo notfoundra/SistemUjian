@@ -56,11 +56,11 @@
                         <div class="col-8">
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-capitalize font-weight-bold">
-                                    Rangking Saya</p>
+                                    Rangking</p>
                                 <h5 class="font-weight-bolder mb-0">
 
-
-                                    <span class=" text-sm font-weight-bolder"></span>
+                                    <?= $rank ?>
+                                    <span class=" text-sm font-weight-bolder">dari <?= $jumsiswa ?> siswa</span>
                                 </h5>
                             </div>
                         </div>
@@ -81,10 +81,10 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Akumulasi nilai </p>
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">IPK </p>
                                 <h5 class="font-weight-bolder mb-0" id="deffectRate">
 
-                                    <span class=" text-sm font-weight-bolder"></span>
+                                    <span class=" text-sm font-weight-bolder"><?= $ipk ?></span>
                                 </h5>
                             </div>
                         </div>
@@ -127,10 +127,10 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Ujian Selesai</p>
+                                <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Ujian Dikerjakan</p>
                                 <h5 class="font-weight-bolder mb-0" id="pph">
                                 </h5>
-                                <span class=" text-sm font-weight-bolder"><?= $expired ?></span>
+                                <span class=" text-sm font-weight-bolder"><?= $expired ?></span> Ujian
                             </div>
                         </div>
                         <div class="col-4 text-end">
@@ -192,6 +192,7 @@
                                                     <strong>Mapel :</strong> <?= $data['mapel'] ?><br>
                                                     <strong>Jam :</strong> <?= $data['jam'] ?><br>
                                                     <strong>Durasi :</strong> <?= $data['durasi'] ?> menit<br>
+                                                    <strong>Nilai :</strong> <?= $data['nilai'] ?? '-' ?> /100<br>
 
                                                     <?php
                                                     // Konversi format tanggal dari "D, d M Y" ke "Y-m-d"
@@ -203,6 +204,9 @@
                                                     } elseif ($tanggalConvert < $tanggalHariIni) {
                                                         $buttonText = "Ujian Berakhir";
                                                         $buttonClass = "disabled btn-danger"; // Warna merah
+                                                    } elseif ($data['nilai'] != null) {
+                                                        $buttonText = "Ujian selesai";
+                                                        $buttonClass = "btn-info disabled";
                                                     } else {
                                                         $buttonText = "Mulai Ujian";
                                                         $buttonClass = "btn-info"; // Warna biru

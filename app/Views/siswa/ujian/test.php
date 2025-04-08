@@ -72,7 +72,8 @@
                         </h5>
                     </div>
                 </div>
-                <form action="<?= base_url($role . '/jawaban/' . $idUjian) ?>" id="examForm">
+                <form action="<?= base_url($role . '/jawaban/' . $idUjian) ?>" id="examForm" method="post">
+                    <input type="text" name="siswaid" id="" value="<?= $userid ?>" hidden>
                     <div class="card-body p-3">
                         <?php if (!empty($soal)): ?>
                             <?php foreach ($soal as $index => $que): ?>
@@ -105,7 +106,7 @@
                     <div class="card-footer">
                         <div class="row">
 
-                            <button type="button" class="btn-info btn">
+                            <button type="submit" class="btn-info btn">
                                 submit
                             </button>
                         </div>
@@ -188,7 +189,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const form = document.querySelector("form");
-        const submitButton = document.querySelector("button[type='button']");
+        const submitButton = document.querySelector("button[type='submit']");
         const soalGroups = document.querySelectorAll("ol.list");
 
         function checkAnswers() {

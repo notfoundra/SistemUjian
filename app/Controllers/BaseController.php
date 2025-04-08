@@ -15,6 +15,7 @@ use App\Models\UjianIndukModel;
 use App\Models\UjianModel;
 use App\Models\SoalModel;
 use App\Models\JawabanModel;
+use App\Models\HasilUjian;
 
 
 /**
@@ -40,6 +41,7 @@ abstract class BaseController extends Controller
     protected $uname;
     protected $soal;
     protected $jawaban;
+    protected $nilai;
 
     public function __construct()
     {
@@ -57,6 +59,7 @@ abstract class BaseController extends Controller
         $this->ujian = new UjianModel();
         $this->soal = new SoalModel();
         $this->jawaban = new JawabanModel();
+        $this->nilai = new HasilUjian();
     }
     /**
      * Instance of the main Request object.

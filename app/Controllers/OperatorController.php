@@ -155,7 +155,7 @@ class OperatorController extends BaseController
         $input = [
             'nama' => $this->request->getPost('nama'),
             'email' => $this->request->getPost('email'),
-            'password' => $this->request->getPost('password'),
+            'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'kelas_id' => $this->request->getPost('kelas_id'),
         ];
 
@@ -214,7 +214,7 @@ class OperatorController extends BaseController
         $input = [
             'nama' => $this->request->getPost('nama'),
             'email' => $this->request->getPost('email'),
-            'password' => $this->request->getPost('password'),
+            'password' =>  password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'kelas_id' => $kelas,
         ];
 

@@ -52,8 +52,7 @@ class UjianController extends BaseController
                 'durasi' => $row['durasi']
             ];
         }
-        // return response()->setJSON($groupedData);
-        // dd($groupedData);
+
         $data = [
             'idInduk' => $idInduk,
             'listKelas' => $listKelas,
@@ -119,6 +118,40 @@ class UjianController extends BaseController
             return $this->response->setJSON(['status' => 'error']);
         }
     }
+    public function resultTest()
+    {
+        $listInduk = $this->ujianInduk->findAll();
+        $data = [
+            'ujian' => $listInduk,
+            'title' => 'Sistem Ujian',
+            'role' => $this->role,
+        ];
+
+        return view($this->role . '/ujian/hasil', $data);
+    }
+    public function individualResult($idInduk)
+    {
+        $uid = $this->uid;
+        $iden = $this->user->idenSiswa($uid);
+        $nilai = $this->ujian->getNilaiSiswa($uid, $idInduk);
+
+        $totalNilai = 0;
+        $jumlahMapel = count($nilai);
+
+        foreach ($nilai as $n) {
+            $totalNilai += (int)$n['nilai'];
+        }
+
+        $ipk = $jumlahMapel > 0 ? $totalNilai / $jumlahMapel / 25 : 0;
+        $data = [
+            'nilai' => $nilai,
+            'title' => 'Sistem Ujian',
+            'role' => $this->role,
+            'iden' => $iden,
+            'ipk' => round($ipk, 2) // misalnya 3.25
+        ];
+        return view($this->role . '/ujian/nilai', $data);
+    }
     public function hasilujian()
     {
         $kelas = $this->kelas->getKelas();
@@ -150,9 +183,11 @@ class UjianController extends BaseController
         $namaUjian = $this->ujian->getName($idUjian);
         $soal = $this->soal->getSoal($idUjian);
         $ujian = $this->ujian->getUjianById($idUjian);
+
         $data = [
             'title' => $namaUjian['judul'] . ' ' . $namaUjian['tahun_ajaran'],
             'role' => $this->role,
+            'userid' => $this->uid,
             'user' => $this->uname,
             'idUjian' => $idUjian,
             'soal' => $soal,
@@ -162,5 +197,60 @@ class UjianController extends BaseController
         ];
 
         return view($this->role . '/ujian/test', $data);
+    }
+    public function submitUjian($idUjian)
+    {
+        $siswaId = $this->request->getPost('siswaid');
+        $data = $this->request->getPost();
+
+        $jumlahBenar = 0;
+
+        // Hitung jawaban yang benar (value == 1 artinya jawaban benar)
+        foreach ($data as $key => $value) {
+            if (strpos($key, 'jawaban_') !== false && $value == 1) {
+                $jumlahBenar++;
+            }
+        }
+
+        // Ambil total soal dari ujian (jangan getSoal() karena udah diacak)
+        $totalSoal = $this->soal->countSoalByUjian($idUjian); // custom function di model
+
+        // Hitung nilai akhir
+        $nilai = ($jumlahBenar / $totalSoal) * 100;
+        // Simpan ke database
+        $this->nilai->insert([
+            'siswa_id' => $siswaId,
+            'ujian_id' => $idUjian,
+            'nilai' => $nilai,
+        ]);
+
+        // Redirect ke halaman selesai atau tampilan hasil
+        return redirect()->to(base_url($this->role . '/ujian/selesai/' . $idUjian));
+    }
+    public function selesaiUjian($idUjian)
+    {
+        $namaUjian = $this->ujian->getName($idUjian);
+        $soal = $this->soal->getSoal($idUjian);
+        $ujian = $this->ujian->getUjianById($idUjian);
+        $siswaId = $this->uid;
+        $nilai = $this->nilai->select('nilai')->where([
+            'ujian_id' => $idUjian,
+            'siswa_id' => $siswaId
+        ])->first();
+
+        $data = [
+            'title' => $namaUjian['judul'] . ' ' . $namaUjian['tahun_ajaran'],
+            'role' => $this->role,
+            'userid' => $siswaId,
+            'user' => $this->uname,
+            'idUjian' => $idUjian,
+            'soal' => $soal,
+            'ujian' => $ujian,
+            'name' => $namaUjian,
+            'durasi' => $ujian['durasi'],
+            'nilai' => $nilai,
+        ];
+
+        return view($this->role . '/ujian/selesai', $data);
     }
 }

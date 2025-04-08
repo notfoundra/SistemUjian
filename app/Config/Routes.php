@@ -66,4 +66,9 @@ $routes->group('guru', ['filter' => 'role:guru'], function ($routes) {
 $routes->group('siswa', ['filter' => 'role:siswa'], function ($routes) {
     $routes->get('', 'SiswaController::index');
     $routes->get('startTest/(:any)', 'UjianController::startTest/$1');
+
+    $routes->post('jawaban/(:any)', 'UjianController::submitUjian/$1');
+    $routes->get('ujian/selesai/(:any)', 'UjianController::selesaiUjian/$1');
+    $routes->get('hasilujian', 'UjianController::resultTest');
+    $routes->get('hasilujian/(:any)', 'UjianController::individualResult/$1');
 });

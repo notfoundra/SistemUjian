@@ -12,10 +12,20 @@ class SiswaController extends BaseController
 
         $uid = $this->uid;
         $scheduled = $this->ujian->getScheduledPersiswa($uid);
-        $expired = $this->ujian->getExpiredPersiswa($uid);
+        $expired = $this->nilai->ujianDone($uid);
+        $nilai = $this->nilai->getAllNilai($uid);
         $listUjian = $this->ujian->getUjianSiswa($uid);
         $groupedData = [];
         $listKelas = $this->kelas->getKelas();
+
+        $totalNilai = 0;
+        $jumlahMapel = count($listUjian);
+
+        foreach ($nilai as $n) {
+            $totalNilai += (int)$n['nilai'];
+        }
+
+        $ipk = $jumlahMapel > 0 ? $totalNilai / $jumlahMapel / 25 : 0;
 
         foreach ($listUjian as $row) {
             $kelas = $row['kelas'];
@@ -27,8 +37,33 @@ class SiswaController extends BaseController
                 'id_ujian' => $row['id'],
                 'mapel' => $row['mapel'],
                 'jam' => $jam,
-                'durasi' => $row['durasi']
+                'durasi' => $row['durasi'],
+                'nilai' => $row['nilai']
             ];
+        }
+        $siswaSekelas = $this->user->getSiswaSekelas($uid);
+        $rank = [];
+
+        foreach ($siswaSekelas as $siswa) {
+            $totalNilai = $this->nilai->sumNilai($siswa['id']); // Asumsinya return angka total nilai
+            $rank[] = [
+                'id' => $siswa['id'],
+                'total_nilai' => $totalNilai
+            ];
+        }
+
+        // Urutkan berdasarkan total_nilai, paling besar ke kecil
+        usort($rank, function ($a, $b) {
+            return $b['total_nilai'] <=> $a['total_nilai'];
+        });
+
+        // Cari ranking si UID
+        $urutan = 1;
+        foreach ($rank as $data) {
+            if ($data['id'] == $uid) {
+                break;
+            }
+            $urutan++;
         }
         $data = [
             'title' => 'Sistem Ujian',
@@ -37,6 +72,9 @@ class SiswaController extends BaseController
             'ujian' => $groupedData,
             'scheduled' => $scheduled,
             'expired' => $expired,
+            'ipk' => round($ipk, 2),
+            'rank' => $urutan,
+            'jumsiswa' => count($siswaSekelas)
         ];
 
         return view($this->role . '/index', $data);

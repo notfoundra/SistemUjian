@@ -111,4 +111,8 @@ class SoalModel extends Model
             // 5. Dekrementasi nilai indeks -> Sudah otomatis dalam loop
         }
     }
+    public function countSoalByUjian($idUjian)
+    {
+        return $this->where('ujian_id', $idUjian)->countAllResults();
+    }
 }

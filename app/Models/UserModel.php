@@ -67,4 +67,23 @@ class UserModel extends Model
     {
         return $this->where('role', 'guru')->countAllResults();
     }
+    public function idenSiswa($id)
+    {
+        return $this->select('users.*, kelas.nama as kelas')
+            ->join('kelas', 'kelas.id=users.kelas_id', 'left')
+            ->where('users.id', $id)
+            ->first();
+    }
+    public function getSiswaSekelas($uid)
+    {
+        $result = $this->select('kelas_id')->where('id', $uid)->first();
+
+        if (!$result) {
+            return []; // kalo UID gak ketemu
+        }
+
+        $kelasId = $result['kelas_id'];
+        $siswa = $this->select('id')->where('kelas_id', $kelasId)->findAll();
+        return $siswa;
+    }
 }
