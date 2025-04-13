@@ -55,15 +55,15 @@ class UjianModel extends Model
     }
     public function getUjianSiswa($id)
     {
-        return $this->select('ujian.id, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel, hasil_ujian.nilai as nilai')
-            ->join('kelas', 'kelas.id=ujian.kelas_id', 'left')
-            ->join('mapel', 'mapel.id=ujian.mapel_id', 'left')
-            ->join('users', 'users.kelas_id=kelas.id', 'left')
-            ->join('hasil_ujian', 'hasil_ujian.ujian_id=ujian.id', 'left')
-            ->where('users.id', $id)
-            ->groupBy('ujian.kelas_id, ujian.tanggal, ujian.mapel_id')
+        return $this->select('ujian.id, ujian.id_ujian_induk, ujian.mapel_id, ujian.kelas_id, ujian.tanggal, ujian.durasi, 
+                              kelas.nama as kelas, mapel.nama as mapel, hasil_ujian.nilai as nilai')
+            ->join('kelas', 'kelas.id = ujian.kelas_id', 'left')
+            ->join('mapel', 'mapel.id = ujian.mapel_id', 'left')
+            ->join('hasil_ujian', 'hasil_ujian.ujian_id = ujian.id AND hasil_ujian.siswa_id = ' . $id, 'left')
+            ->where('ujian.kelas_id = (SELECT kelas_id FROM users WHERE id = ' . $id . ')')
             ->findAll();
     }
+
     public function getNilaiSiswa($id, $idUjian)
     {
         return $this->select('ujian.id, ujian.id_ujian_induk,ujian.mapel_id, ujian.kelas_id,ujian.tanggal, ujian.durasi, kelas.nama as kelas, mapel.nama as mapel, hasil_ujian.nilai as nilai')

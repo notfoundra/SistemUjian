@@ -151,7 +151,7 @@
                 <div class="modal-body">
                     <p>Are you sure you want to delete?</p>
                     <form action="<?= base_url($role . '/deleteSoal') ?>" method="post">
-                        <input type="hidden" id="stopPlanId" name="id">
+                        <input type="text" id="stopPlanId" name="id">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -356,4 +356,18 @@
 
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stopButtons = document.querySelectorAll('.stop-btn');
+            const inputField = document.getElementById('stopPlanId');
+
+            stopButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    inputField.value = id;
+                });
+            });
+        });
+    </script>
+
     <?= $this->endSection() ?>

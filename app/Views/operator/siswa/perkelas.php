@@ -71,30 +71,32 @@
                             <table id="dataTable" class="display compact striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Soal</th>
-                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Jawaban Benar</th>
-                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Pilihan 1</th>
-                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2"> Pilihan 2</th>
-                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2"> Pilihan 3</th>
+                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Nama</th>
+                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Kelas</th>
+                                        <th class="text-uppercase text-center text-dark text-xxs font-weight-bolder opacity-7 ps-2">Aksi</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($soal as $que) : ?>
+                                    <?php foreach ($siswa as $sis) : ?>
                                         <tr class="text-center">
-                                            <td><?= $que['nama'] ?></td>
+                                            <td><?= $sis['nama'] ?></td>
+                                            <td><?= $sis['email'] ?? 'belum ada wali kelas' ?></td>
+                                            <td><?= $sis['kelas'] ?? 'belum ada wali kelas' ?></td>
 
                                             <td>
 
                                                 <button class="btn btn-sm text-white bg-warning edit-btn  mr-2"
-                                                    data-id="<?= $que['id']; ?>"
-
+                                                    data-id="<?= $sis['id']; ?>"
+                                                    data-nama="<?= $sis['nama'] ?>"
+                                                    data-email="<?= $sis['email'] ?>"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#editModal">
                                                     <i class="fa fa-pen text-lg"></i>
                                                 </button>
                                                 <button class="btn btn-sm text-white bg-danger stop-btn  mr-2"
-                                                    data-id="<?= $que['id']; ?>"
+                                                    data-id="<?= $sis['id']; ?>"
                                                     data-bs-toggle="modal"
                                                     data-bs-target="#confirmStopModal">
                                                     <i class="fa fa-trash text-lg"></i>
@@ -139,7 +141,23 @@
                                                     <label for="waliKelas" class="form-control-label">Nama</label>
                                                     <input type="text" name="nama" id="" class="form-control">
                                                 </div>
-
+                                                <div class="form-group">
+                                                    <label for="waliKelas" class="form-control-label">Email</label>
+                                                    <input type="email" name="email" id="" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="waliKelas" class="form-control-label">Password</label>
+                                                    <input type="password" name="password" id="" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="waliKelas" class="form-control-label">Kelas</label>
+                                                    <select name="kelas" id="jarumname" class="form-control">
+                                                        <option value="">----</option>
+                                                        <?php foreach ($listkelas as $kls): ?>
+                                                            <option value="<?= $kls['id'] ?>"><?= $kls['nama'] ?></option>
+                                                        <?php endforeach ?>
+                                                    </select>
+                                                </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -163,6 +181,23 @@
                                                     <label for="waliKelas" class="form-control-label">Nama</label>
                                                     <input type="text" name="id" id="" class="form-control" hidden>
                                                     <input type="text" name="nama" id="" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="waliKelas" class="form-control-label">Email</label>
+                                                    <input type="email" name="email" id="" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="waliKelas" class="form-control-label">Password</label>
+                                                    <input type="password" name="password" id="" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="waliKelas" class="form-control-label">Kelas</label>
+                                                    <select name="kelas_id" id="jarumname" class="form-control">
+                                                        <option value="">----</option>
+                                                        <?php foreach ($listkelas as $kls): ?>
+                                                            <option value="<?= $kls['id'] ?>"><?= $kls['nama'] ?></option>
+                                                        <?php endforeach ?>
+                                                    </select>
                                                 </div>
 
                                         </div>
