@@ -39,12 +39,25 @@
                                     <h5>
                                         Data Siswa
                                     </h5>
-                                    <button class="btn btn-info addBtn" data-bs-toggle="modal"
-                                        data-bs-target="#addModal">
-                                        <i class="fa fa-plus text-lg"> </i>
-                                        Tambah Siswa
+                                    <div>
 
-                                    </button>
+                                        <button class="btn btn-info addBtn" data-bs-toggle="modal"
+                                            data-bs-target="#addModal">
+                                            <i class="fa fa-plus text-lg"> </i>
+                                            Tambah Siswa
+
+                                        </button>
+                                        <button class="btn btn-info " data-bs-toggle="modal"
+                                            data-bs-target="#importModal">
+                                            <i class="fas fa-file-upload"></i>
+                                            Upload Data Siswa
+
+                                        </button>
+                                        <a href="<?= base_url($role . '/download-template'); ?>" class="btn btn-info">
+                                            <i class="fas fa-file-download"></i> Download Template
+                                        </a>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -55,7 +68,45 @@
         </div>
 
     </div>
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModal" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Import Data Siswa</h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body align-items-center">
+                    <div class="row align-items-center">
+                        <div id="drop-area" class="border rounded d-flex justify-content-center align-item-center mx-3" style="height:200px; width: 95%; cursor:pointer;">
+                            <div class="text-center mt-5">
+                                <i class="ni ni-cloud-upload-96" style="font-size: 48px;">
 
+                                </i>
+                                <p class="mt-3" style="font-size: 28px;">
+                                    Upload file here
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-9 pl-0">
+
+                            <form action="<?= base_url($role . '/importSiswa') ?>" id="modalForm" method="POST" enctype="multipart/form-data">
+                                <input type="file" id="fileInput" name="file" multiple accept=".xls , .xlsx" class="form-control ">
+                        </div>
+                        <div class="col-3 pl-0">
+                            <button type="submit" class="btn btn-info btn-block"> Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
     <div class="row">
         <?php foreach ($kelas as $kls): ?>
             <div class="col-xl-3 col-sm-6 my-2">

@@ -39,7 +39,7 @@
                                     <h5>
                                         Data Nilai <?= $kelas ?>
                                     </h5>
-
+                                    <a href="<?= site_url($role . '/exportNilai/' . $kelas_id) ?>" class="btn btn-success mb-3">Export Nilai ke Excel</a>
                                 </div>
 
                             </div>

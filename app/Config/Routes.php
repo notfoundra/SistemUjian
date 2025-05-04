@@ -19,6 +19,10 @@ $routes->group('operator', ['filter' => 'role:operator'], function ($routes) {
     $routes->post('tambahSiswa', 'OperatorController::tambahSiswa');
     $routes->post('deleteSiswa', 'OperatorController::deleteSiswa');
     $routes->post('editSiswa', 'OperatorController::editSiswa');
+    $routes->get('download-template', 'SiswaController::downloadtemplate');
+    $routes->post('importSiswa', 'SiswaController::importSiswa');
+
+
 
     $routes->get('dataguru', 'OperatorController::guru');
     $routes->post('tambahGuru', 'OperatorController::tambahGuru');
@@ -47,6 +51,7 @@ $routes->group('operator', ['filter' => 'role:operator'], function ($routes) {
     $routes->post('updateUjian', 'UjianController::updateUjian');
     $routes->get('hasilujian', 'UjianController::hasilujian');
     $routes->get('hasilujianPerkelas/(:any)', 'UjianController::hasilujianPerkelas/$1');
+    $routes->get('exportNilai/(:any)', 'UjianController::exportNilai/$1');
 });
 
 $routes->group('guru', ['filter' => 'role:guru'], function ($routes) {
@@ -64,6 +69,7 @@ $routes->group('guru', ['filter' => 'role:guru'], function ($routes) {
 
     $routes->get('hasilujian', 'UjianController::hasilujian');
     $routes->get('hasilujianPerkelas/(:any)', 'UjianController::hasilujianPerkelas/$1');
+    $routes->get('exportNilai/(:any)', 'UjianController::exportNilai/$1');
 });
 
 $routes->group('siswa', ['filter' => 'role:siswa'], function ($routes) {

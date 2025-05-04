@@ -50,4 +50,12 @@ class KelasModel extends Model
             ->join('users', 'users.id=kelas.wali_kelas', 'left')
             ->findAll();
     }
+    public function getIdbyName($kelas)
+    {
+        $result = $this->select('id')
+            ->where('nama', $kelas)
+            ->first();
+
+        return $result ? (string) $result['id'] : null;
+    }
 }

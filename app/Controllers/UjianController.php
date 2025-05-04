@@ -4,6 +4,10 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Borders;
 
 class UjianController extends BaseController
 {
@@ -195,6 +199,7 @@ class UjianController extends BaseController
         }
 
         $data = [
+            'kelas_id' => $kelas,
             'listNilai' => $listNilai,
             'ujian' => $ujian,
             'kelas' => $namaKelas['nama'],
@@ -281,5 +286,50 @@ class UjianController extends BaseController
         ];
 
         return view($this->role . '/ujian/selesai', $data);
+    }
+    public function exportNilai($kelasId)
+    {
+        $siswa = $this->user->select('id,nama')->where('kelas_id', $kelasId)->findAll();
+        $ujian = $this->ujian->where('kelas_id', $kelasId)->findAll();
+        $kelas = $this->kelas->find($kelasId);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Header
+        $sheet->setCellValue('A1', 'Nama Siswa');
+        $col = 'B';
+        foreach ($ujian as $uji) {
+            $mapel = $this->ujian->getMapel($uji['id']);
+            $sheet->setCellValue($col . '1', $mapel);
+            $col++;
+        }
+
+        // Data Nilai
+        $row = 2;
+        foreach ($siswa as $sis) {
+            $sheet->setCellValue('A' . $row, $sis['nama']);
+            $col = 'B';
+            foreach ($ujian as $uji) {
+                $nilai = $this->nilai->getNilai($uji['id'], $sis['id']);
+                $sheet->setCellValue($col . $row, $nilai ?? '-');
+                $col++;
+            }
+            $row++;
+        }
+
+        // Download response
+        $fileName = 'Nilai_' . $kelas['nama'] . '.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment;filename=\"$fileName\"");
+        header('Cache-Control: max-age=0');
+        $lastColumn = chr(ord('A') + count($ujian)); // Misalnya 'D' kalau ada 3 mapel
+        $lastRow = $row - 1;
+
+        $sheet->getStyle("A1:{$lastColumn}{$lastRow}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
     }
 }
