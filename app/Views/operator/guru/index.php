@@ -117,7 +117,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <p>Are you sure you want to delete?</p>
-                                            <form action="<?= base_url($role . '/deleteKelas') ?>" method="post">
+                                            <form action="<?= base_url($role . '/deleteGuru') ?>" method="post">
                                                 <input type="hidden" id="stopPlanId" name="id">
                                         </div>
                                         <div class="modal-footer">

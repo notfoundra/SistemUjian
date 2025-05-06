@@ -228,4 +228,14 @@ class OperatorController extends BaseController
             return redirect()->back()->withInput()->with('error', 'Data Gagal Di Edit');
         }
     }
+    public function deleteGuru()
+    {
+        $id = $this->request->getPost('id');
+        $delete = $this->user->delete($id);
+        if ($delete) {
+            return redirect()->back()->withInput()->with('success', 'Data Berhasil Di Hapus');
+        } else {
+            return redirect()->back()->withInput()->with('error', 'Data Gagal Di Hapus');
+        }
+    }
 }
